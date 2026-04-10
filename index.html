@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SkyCast Pro</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="toggle">
+    <button onclick="toggleMode()">🌙</button>
+</div>
+
+<div class="container">
+    <h1>SkyCast Pro</h1>
+
+    <div class="search-box">
+        <input type="text" id="city" placeholder="Enter city">
+        <button onclick="getWeather()">Search</button>
+        <button onclick="getLocationWeather()">📍</button>
+    </div>
+
+    <div class="weather-card" id="weatherCard">
+        <h2 id="cityName"></h2>
+        <p id="temp"></p>
+        <p id="desc"></p>
+        <img id="icon">
+    </div>
+
+    <div class="forecast" id="forecast"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
