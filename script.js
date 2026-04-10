@@ -34,3 +34,7 @@ function displayWeather(data) {
     document.getElementById("icon").src =
     `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 }
+
+function toggleMode() {
+    document.body.classList.toggle("dark");
+}
