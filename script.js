@@ -3,27 +3,27 @@ const apiKey = "2406551df80c4747ff13a968c5f06b27";
 function getWeather() {
     const city = document.getElementById("city").value;
 
-    if (!city) {
-        alert("Please enter city name");
-        return;
-    }
-
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
     .then(res => res.json())
     .then(data => {
-
-        // ❗ error check
-        if (data.cod !== 200) {
-            alert("City not found ❌");
-            return;
-        }
-
         displayWeather(data);
         getForecast(city);
         setBackground(data.weather[0].main);
-    })
-    .catch(() => {
-        alert("Something went wrong ⚠️");
+    });
+}
+
+function getLocationWeather() {
+    navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+        .then(res => res.json())
+        .then(data => {
+            displayWeather(data);
+            getForecast(data.name);
+            setBackground(data.weather[0].main);
+        });
     });
 }
 
@@ -35,6 +35,34 @@ function displayWeather(data) {
     `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 }
 
+function getForecast(city) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+    .then(res => res.json())
+    .then(data => {
+        let output = "";
+        for (let i = 0; i < data.list.length; i += 8) {
+            const item = data.list[i];
+            output += `
+                <div>
+                    <p>${item.dt_txt.split(" ")[0]}</p>
+                    <p>${item.main.temp}°C</p>
+                </div>
+            `;
+        }
+        document.getElementById("forecast").innerHTML = output;
+    });
+}
+
 function toggleMode() {
     document.body.classList.toggle("dark");
+}
+
+function setBackground(weather) {
+    if (weather === "Rain") {
+        document.body.style.background = "linear-gradient(#4e54c8, #8f94fb)";
+    } else if (weather === "Clear") {
+        document.body.style.background = "linear-gradient(#f7971e, #ffd200)";
+    } else {
+        document.body.style.background = "linear-gradient(#4facfe, #00f2fe)";
+    }
 }
